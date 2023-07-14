@@ -1,9 +1,10 @@
 # react-vite-boilerplate
 
-boilerplate untuk sesuai kebutuhan gw sendiri
-boilerplate for my needed
+<p>boilerplate untuk sesuai kebutuhan gw sendiri</p>
+<p>boilerplate for my needed</p>
 
-package list :
+# package list :
+
 - react-router
 - vite
 - reactjs
