@@ -2,9 +2,13 @@ import reactLogo from '../assets/react.svg'
 import viteLogo from '../assets/vite.svg'
 import { useState } from 'react'
 import { HStack, Text, VStack, Image, Button } from '@chakra-ui/react'
+import { RootState } from '../redux/store/Store'
+import { useSelector, useDispatch } from 'react-redux'
+import { incrementByAmount } from '../redux/feature/main'
 
 export const Welcome = () => {
-    const [count, setCount] = useState(0)
+    const count = useSelector((state: RootState) => state.counter.value)
+    const dispatch = useDispatch()
 
     return (
         <VStack >
@@ -19,7 +23,7 @@ export const Welcome = () => {
                 </HStack>
                 <Text fontSize="3xl" marginTop="30px">Vite React Boilerplate</Text>
                 <div className="card">
-                    <Button marginBottom="30px" onClick={() => setCount((count) => count + 1)}>
+                    <Button marginBottom="30px" onClick={() => dispatch(incrementByAmount(count + 5))}>
                         count is {count}
                     </Button>
                     <Text fontSize="2xl">

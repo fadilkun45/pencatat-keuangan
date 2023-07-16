@@ -1,6 +1,7 @@
 import { Routes, Route, BrowserRouter } from 'react-router-dom'
 import { ChakraProvider } from '@chakra-ui/react'
-import { Welcome } from './Pages/Welcome'
+import { Main } from './Pages/Main'
+import { Detailpage } from './Pages/Detail'
 
 function App() {
 
@@ -8,7 +9,8 @@ function App() {
    <ChakraProvider>
      <BrowserRouter>
       <Routes>
-        <Route path='/' Component={Welcome} />
+        <Route path='/' Component={Main} />
+        <Route path='/detail' Component={Detailpage} />
       </Routes>
     </BrowserRouter>
    </ChakraProvider>
