@@ -42,7 +42,7 @@ export const Detailpage = () => {
     useEffect(() => {
         dispatch(getDetail({ id: search.get('id') || "" }))
         dispatch(getList())
-    }, [search.get('id')])
+    }, [dispatch, search])
 
     const deletePengeluaran = (item: Detail) => {
         console.log("oke")
@@ -56,8 +56,6 @@ export const Detailpage = () => {
 
     return (
         <VStack>
-            {/* <div>id: {search.get('id')}</div> */}
-
             <Text width="full" textAlign="left">Nama</Text>
             <Input value={newDetail?.title} onChange={(v) => setNewDetail({ ...newDetail, title: v.target.value })} />
             <Text  width="full" textAlign="left">Bugdet</Text>
@@ -79,7 +77,7 @@ export const Detailpage = () => {
                 <CardBody>
                     <Stack divider={<StackDivider />} spacing='4'>
                         {
-                        list.map((item, index) => (
+                        list.reverse().map((item, index) => (
                               <DetailCard handleClick={deletePengeluaran} item={{...item, index}} key={index} />
                             ))
                         }
