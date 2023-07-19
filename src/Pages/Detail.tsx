@@ -77,7 +77,7 @@ export const Detailpage = () => {
                 <CardBody>
                     <Stack divider={<StackDivider />} spacing='4'>
                         {
-                        list.reverse().map((item, index) => (
+                        list?.reverse()?.map((item, index) => (
                               <DetailCard handleClick={deletePengeluaran} item={{...item, index}} key={index} />
                             ))
                         }

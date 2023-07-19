@@ -55,7 +55,7 @@ export const Main = () => {
 
             <VStack marginTop="40px" spacing="6" width="full">
                 {
-                    list.reverse().map((item) => (
+                    list?.reverse()?.map((item) => (
                         <MainBox handleClick={Delete} key={item.id} item={item} />
                     ))
                 }
