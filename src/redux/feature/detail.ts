@@ -33,6 +33,8 @@ export const detailSlice = createSlice({
             }
 
             state.push(...JSON.parse(localStorage.getItem(action.payload.id!) ?? '{}'))
+            
+            state.reverse()
 
         },
 

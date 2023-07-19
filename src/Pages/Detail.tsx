@@ -35,7 +35,7 @@ export const Detailpage = () => {
 
         dispatch(addDetail({ ...newDetail, id: search.get('id') || '', createdAt: dayjs(new Date).format("DD MMMM YYYY, HH mm") }))
         dispatch(editList({...listParent, currentAmount: listParent.currentAmount! +  newDetail.amount}))
-        dispatch(getList())
+        dispatch(getDetail({ id: search.get('id') || "" }))
         setNewDetail({...newDetail, title: "", amount: 0})
     }
 
@@ -77,7 +77,7 @@ export const Detailpage = () => {
                 <CardBody>
                     <Stack divider={<StackDivider />} spacing='4'>
                         {
-                        list?.reverse()?.map((item, index) => (
+                        list?.map((item, index) => (
                               <DetailCard handleClick={deletePengeluaran} item={{...item, index}} key={index} />
                             ))
                         }

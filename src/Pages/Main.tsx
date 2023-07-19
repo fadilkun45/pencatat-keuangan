@@ -34,10 +34,11 @@ export const Main = () => {
 
         const id = uuidv4()
         dispatch(addList({ ...newList, currentAmount: 0, id: id }))
+        setNewList({...newList, limit: 0, title: ''})
+        dispatch(getList())
     }
 
     const Delete = (item: MainList) => {
-        // console.log("OK")
         console.log(item)
         dispatch(deleteList(item))
         dispatch(getList())
@@ -55,7 +56,7 @@ export const Main = () => {
 
             <VStack marginTop="40px" spacing="6" width="full">
                 {
-                    list?.reverse()?.map((item) => (
+                  list.map((item) => (
                         <MainBox handleClick={Delete} key={item.id} item={item} />
                     ))
                 }

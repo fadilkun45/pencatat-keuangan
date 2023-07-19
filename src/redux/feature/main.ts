@@ -33,6 +33,7 @@ export const mainListSlice = createSlice({
             }
 
             state.push(...JSON.parse(localStorage.getItem("MainList" || "") ?? '{}'))
+            state.reverse()
         },
         addList: (state, action: PayloadAction<MainList>) => {
             localStorage.setItem('MainList', JSON.stringify([...state, action.payload]))
