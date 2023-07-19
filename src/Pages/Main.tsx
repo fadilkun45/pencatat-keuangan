@@ -48,9 +48,9 @@ export const Main = () => {
         <VStack>
             <VStack width="full" textAlign="left">
                 <Text width="full">Nama</Text>
-                <Input onChange={(v) => setNewList({ ...newList, title: v.target.value })} />
+                <Input value={newList?.title} onChange={(v) => setNewList({ ...newList, title: v.target.value })} />
                 <Text width="full" >Limit</Text>
-                <Input value={newList?.currentAmount}  onChange={(v) => setNewList({ ...newList, limit: currencyToInteger(v.target.value) })} />
+                <Input value={newList?.limit} onChange={(v) => setNewList({ ...newList, limit: currencyToInteger(v.target.value) })} />
                 <Button fontSize={{'sm': 'md'}} onClick={submit}>Submit</Button>
             </VStack>
 
