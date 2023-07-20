@@ -36,10 +36,12 @@ export const mainListSlice = createSlice({
             state.reverse()
         },
         addList: (state, action: PayloadAction<MainList>) => {
+            state.reverse()
             localStorage.setItem('MainList', JSON.stringify([...state, action.payload]))
             state.push(action.payload)
         },
         editList: (state, action: PayloadAction<MainList>) => {
+            state.reverse()
             // console.log("check payload",action.payload)
             let oldState = cloneDeep(state)
             let filtered: WritableDraft<MainList>[] = []
@@ -54,6 +56,7 @@ export const mainListSlice = createSlice({
             state = [...filtered, action.payload]
         },
         deleteList: (state, action: PayloadAction<MainList>) => {
+            state.reverse()
             // console.log("check payload",action.payload)
             let oldState = cloneDeep(state)
             let filtered: WritableDraft<MainList>[] = []

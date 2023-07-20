@@ -39,11 +39,13 @@ export const detailSlice = createSlice({
         },
 
         addDetail: (state, action: PayloadAction<Detail>) => {
+            state.reverse()
             localStorage.setItem(action.payload.id!, JSON.stringify([...state, action.payload]))
             state.push(action.payload)
         },
 
         deleteDetail: (state, action: PayloadAction<Detail>) => {
+            state.reverse()
             let oldState = cloneDeep(state)
             oldState.splice(action.payload.index!, 1)
             // console.log(oldState)
