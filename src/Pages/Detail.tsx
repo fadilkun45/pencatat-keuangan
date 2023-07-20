@@ -37,6 +37,7 @@ export const Detailpage = () => {
         dispatch(editList({...listParent, currentAmount: listParent.currentAmount! +  newDetail.amount}))
         dispatch(getDetail({ id: search.get('id') || "" }))
         setNewDetail({...newDetail, title: "", amount: 0})
+        dispatch(getList())
     }
 
     useEffect(() => {
