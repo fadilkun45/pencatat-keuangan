@@ -20,15 +20,13 @@ export const mainListSlice = createSlice({
     reducers: {
         getList: (state) => {
 
-            // console.log(JSON.parse(localStorage.getItem("MainList") ?? '{}'))
-
             state.length = 0
 
-            if(state.length !== 0 ){
+            if (state.length !== 0) {
                 return
             }
 
-            if(JSON.parse(localStorage.getItem("MainList") ?? '{}') === null || Object.keys(JSON.parse(localStorage.getItem("MainList") ?? '{}')).length === 0){
+            if (JSON.parse(localStorage.getItem("MainList") ?? '{}') === null || Object.keys(JSON.parse(localStorage.getItem("MainList") ?? '{}')).length === 0) {
                 return
             }
 
@@ -41,31 +39,33 @@ export const mainListSlice = createSlice({
             state.push(action.payload)
         },
         editList: (state, action: PayloadAction<MainList>) => {
+
             state.reverse()
-            // console.log("check payload",action.payload)
             let oldState = cloneDeep(state)
             let filtered: WritableDraft<MainList>[] = []
             oldState.map((v) => {
-                if(v.id !== action.payload.id){
+                if (v.id !== action.payload.id) {
                     filtered.push(v)
+                } else {
+                    filtered.push(action.payload)
                 }
             })
-            // console.log("baru",filtered)
 
-            localStorage.setItem('MainList', JSON.stringify([...filtered, action.payload]))
+            localStorage.setItem('MainList', JSON.stringify(filtered))
+
             state = [...filtered, action.payload]
         },
         deleteList: (state, action: PayloadAction<MainList>) => {
             state.reverse()
-            // console.log("check payload",action.payload)
+
             let oldState = cloneDeep(state)
             let filtered: WritableDraft<MainList>[] = []
             oldState.map((v) => {
-                if(v.id !== action.payload.id){
+                if (v.id !== action.payload.id) {
                     filtered.push(v)
                 }
             })
-            // console.log("baru",filtered)
+
             localStorage.removeItem(action.payload.id || '')
             localStorage.setItem('MainList', JSON.stringify([...filtered]))
             state = [...filtered]
