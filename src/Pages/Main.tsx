@@ -57,7 +57,7 @@ export const Main = () => {
                 <Button fontSize={{'sm': 'md'}} onClick={submit}>Submit</Button>
             </VStack>
 
-            <VStack marginTop="40px" spacing="6" width="full" p="6" overflowY="auto">
+            <VStack marginTop="40px" spacing="6" width="full" px="1" py="4" overflowY="auto">
                 {
                   list.map((item) => (
                         <MainBox handleClick={Delete} key={item.id} item={item} />
