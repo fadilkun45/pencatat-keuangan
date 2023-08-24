@@ -29,7 +29,7 @@ export const Navbar = () => {
         position: 'top-right',
         isClosable: true,
         duration: 1000,
-        colorScheme: "red",
+        colorScheme: "yellow",
       })
     }
 
@@ -39,12 +39,6 @@ export const Navbar = () => {
     promptInstall.prompt();
   };
 
-  useLayoutEffect( () => {
-    const relatedApps = navigator.getInstalledRelatedApps();
-    setPwaInstalled(relatedApps.length > 0)
-  }, [])
-
-
 
 
   return (
@@ -52,7 +46,7 @@ export const Navbar = () => {
       <Text fontWeight="bold" fontSize="xl">Pencatat Keuangan</Text>
       <Spacer />
       {
-        !PwaInstalled ?   <VStack onClick={onClick} >
+        supportsPWA ?  <VStack onClick={onClick} >
         <DownloadIcon boxSize={3} />
         <Text fontSize="xs">Install App</Text>
       </VStack> : ""

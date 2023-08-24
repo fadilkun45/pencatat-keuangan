@@ -5,7 +5,8 @@ import { useEffect, useState } from 'react'
 import { addList, deleteList, getList, MainList } from "../redux/feature/main"
 import { MainBox } from "../components/MainBox"
 import { v4 as uuidv4 } from 'uuid';
-import { currencyToInteger } from "../lib/Formatter"
+import { currencyToInteger, formatRupiah, onlyNumber } from "../lib/Formatter"
+import ScrollToTop from "react-scroll-to-top"
 
 
 export const Main = () => {
@@ -33,7 +34,7 @@ export const Main = () => {
 
 
         const id = uuidv4()
-        dispatch(addList({ ...newList, currentAmount: 0, id: id }))
+        dispatch(addList({ ...newList, currentAmount: 0, createdAt: new Date().toISOString() , id: id }))
         setNewList({...newList, limit: 0, title: ''})
         dispatch(getList())
     }
@@ -44,23 +45,26 @@ export const Main = () => {
         dispatch(getList())
     }
 
+   
+
     return (
-        <VStack>
+        <VStack >
             <VStack width="full" textAlign="left">
                 <Text width="full">Nama</Text>
                 <Input value={newList?.title} onChange={(v) => setNewList({ ...newList, title: v.target.value })} />
                 <Text width="full" >Limit</Text>
-                <Input value={newList?.limit} onChange={(v) => setNewList({ ...newList, limit: currencyToInteger(v.target.value) })} />
+                <Input  value={formatRupiah(newList?.limit || 0)} onChange={(v) => setNewList({ ...newList, limit: parseInt(onlyNumber(v.target.value))  })} />
                 <Button fontSize={{'sm': 'md'}} onClick={submit}>Submit</Button>
             </VStack>
 
-            <VStack marginTop="40px" spacing="6" width="full">
+            <VStack marginTop="40px" spacing="6" width="full" p="6" overflowY="auto">
                 {
                   list.map((item) => (
                         <MainBox handleClick={Delete} key={item.id} item={item} />
                     ))
                 }
             </VStack>
+            <ScrollToTop smooth className="scrollTop"  color="#6f00ff" />
         </VStack>
     )
 }

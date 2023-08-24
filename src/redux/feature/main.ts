@@ -7,7 +7,8 @@ export interface MainList {
     limit?: number,
     title?: string,
     currentAmount?: number,
-    id?: string
+    id?: string,
+    createdAt?: string
 }
 
 const initialState: MainList[] = [

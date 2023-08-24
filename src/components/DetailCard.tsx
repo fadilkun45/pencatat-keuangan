@@ -1,7 +1,8 @@
-import { Box, Button, CardBody, CardHeader, Heading, Text, VStack, Card, useToast, HStack } from '@chakra-ui/react'
+import { Box, Button, Heading, Text, HStack } from '@chakra-ui/react'
 import { Detail } from '../redux/feature/detail'
 import { DeleteIcon } from "@chakra-ui/icons"
 import { formatRupiah } from '../lib/Formatter'
+import dayjs from 'dayjs'
 
 export const DetailCard = ({item, handleClick}: {item: Detail, handleClick: (params: any) => any}) => {
   return (
@@ -10,12 +11,14 @@ export const DetailCard = ({item, handleClick}: {item: Detail, handleClick: (par
         {item.title}
     </Heading>
     <Text pt='2' fontSize='sm'>
-       {formatRupiah(item.amount || 0)}
+      Rp. {formatRupiah(item.amount || 0)}
     </Text>
     <Text pt='2' fontSize='sm'>
-       {item.createdAt}
+       {dayjs(item.createdAt).format("DD MMM YYYY, HH mm") }
     </Text>
-    <Button onClick={() => {handleClick(item)}} zIndex={6} width="full" position="relative"><DeleteIcon   /></Button>
+    <HStack gap="9" mt="4">
+    <Button onClick={() => {handleClick(item)}} zIndex={6} width="sm" position="relative"><DeleteIcon   /></Button>
+    </HStack>
 </Box>
   )
 }

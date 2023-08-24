@@ -22,3 +22,13 @@ export function currencyToInteger(currency: string): number {
 
   return integerValue;
 }
+
+export function onlyNumber(parseNumber: string){
+  
+  const parse =  parseNumber.replace(/[^\d]/g, '')
+
+  parseInt(parse)
+
+  return parse
+
+}

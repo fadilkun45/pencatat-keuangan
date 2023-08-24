@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from '../redux/store/Store'
 import { Detail, addDetail, deleteDetail, getDetail } from '../redux/feature/detail'
 import { editList, getList } from '../redux/feature/main'
-import { formatRupiah } from '../lib/Formatter'
+import { formatRupiah, onlyNumber } from '../lib/Formatter'
 import dayjs from 'dayjs'
 import { DetailCard } from '../components/DetailCard'
 
@@ -22,21 +22,21 @@ export const Detailpage = () => {
 
     const submit = () => {
 
-        if(!newDetail?.title || !newDetail?.amount){
+        if (!newDetail?.title || !newDetail?.amount) {
             toast({
                 title: 'Title atau Bugdet Belum Di isi',
                 position: 'top-right',
                 isClosable: true,
                 duration: 1000,
                 colorScheme: "red",
-              })
-              return
+            })
+            return
         }
 
-        dispatch(addDetail({ ...newDetail, id: search.get('id') || '', createdAt: dayjs(new Date).format("DD MMMM YYYY, HH mm") }))
-        dispatch(editList({...listParent, currentAmount: listParent.currentAmount! +  newDetail.amount}))
+        dispatch(addDetail({ ...newDetail, id: search.get('id') || '', createdAt: new Date().toISOString() }));
+        dispatch(editList({ ...listParent, currentAmount: listParent.currentAmount! + newDetail.amount }))
         dispatch(getDetail({ id: search.get('id') || "" }))
-        setNewDetail({...newDetail, title: "", amount: 0})
+        setNewDetail({ ...newDetail, title: "", amount: 0 })
         dispatch(getList())
     }
 
@@ -46,24 +46,21 @@ export const Detailpage = () => {
     }, [dispatch, search])
 
     const deletePengeluaran = (item: Detail) => {
-        console.log("oke")
-        console.log(item)
-        dispatch(editList({...listParent, currentAmount: listParent.currentAmount! - item.amount! }))
+        dispatch(editList({ ...listParent, currentAmount: listParent.currentAmount! - item.amount! }))
         dispatch(deleteDetail(item))
         dispatch(getList())
         dispatch(getDetail({ id: search.get('id') || "" }))
-
     }
 
     return (
         <VStack>
             <Text width="full" textAlign="left">Nama</Text>
             <Input value={newDetail?.title} onChange={(v) => setNewDetail({ ...newDetail, title: v.target.value })} />
-            <Text  width="full" textAlign="left">Bugdet</Text>
-            <Input value={newDetail?.amount} onChange={(v) => setNewDetail({ ...newDetail, amount: isNaN(Number(v.target.value)) ? 0 : parseInt(v.target.value) })} />
-            <HStack width="full" justifyContent="space-between">
-            <Button fontSize={{'sm': 'md'}} colorScheme="red" onClick={() => history.back()}>Kembali</Button>
-            <Button fontSize={{'sm': 'md'}} colorScheme="blue" onClick={submit}>Submit</Button>
+            <Text width="full" textAlign="left">Bugdet</Text>
+            <Input value={formatRupiah(newDetail?.amount || 0)} onChange={(v) => setNewDetail({ ...newDetail, amount: parseInt(onlyNumber(v.target.value)) || 0 })} />
+            <HStack width="full" my="4" justifyContent="flex-end">
+                <Button fontSize={{ 'sm': 'md' }} colorScheme="red" onClick={() => history.back()}>Kembali</Button>
+                <Button fontSize={{ 'sm': 'md' }} colorScheme="blue" onClick={submit}>Submit</Button>
             </HStack>
             <VStack>
 
@@ -72,14 +69,27 @@ export const Detailpage = () => {
 
             <Card width="full" textAlign="left" variant="elevated">
                 <CardHeader>
-                    <Heading size={{'sm': 'md', 'lg': 'md'}}>Total keseluruhan: {formatRupiah(listParent?.currentAmount || 0)}</Heading>
-                    <Heading size={{'sm': 'md', 'lg': 'md'}}>Limit: {formatRupiah(listParent?.limit || 0)}</Heading>
+                    <Heading size={{ 'sm': 'md', 'lg': 'md' }}>Total keseluruhan: {formatRupiah(listParent?.currentAmount || 0)}</Heading>
+                    <Heading size={{ 'sm': 'md', 'lg': 'md' }}>Limit: {formatRupiah(listParent?.limit || 0)}  </Heading>
+                    <Heading size={{ 'sm': 'md', 'lg': 'md' }} color={
+                        parseInt(((listParent.currentAmount! / listParent.limit!) * 100).toFixed(2)) < 30 ? "green.500"
+                            : parseInt(((listParent.currentAmount! / listParent.limit!) * 100).toFixed(2)) < 80 ? "yellow.500"
+                                : parseInt(((listParent.currentAmount! / listParent.limit!) * 100).toFixed(2)) < 100 ? "red.500"
+                                    : "red.500"}  >
+                        {
+                            parseInt(((listParent.currentAmount! / listParent.limit!) * 100).toFixed(2)) < 30 ? "Ayo Jajan"
+                            : parseInt(((listParent.currentAmount! / listParent.limit!) * 100).toFixed(2)) < 60 ? "Jajan dulu lagi gk sih"
+                                : parseInt(((listParent.currentAmount! / listParent.limit!) * 100).toFixed(2)) < 80 ? "Dikit Lagi"
+                                    : parseInt(((listParent.currentAmount! / listParent.limit!) * 100).toFixed(2)) < 100 ? "Waduh"
+                                        : "JAJAN TEROS"
+                        }
+                    </Heading>
                 </CardHeader>
                 <CardBody>
                     <Stack divider={<StackDivider />} spacing='4'>
                         {
-                        list?.map((item, index) => (
-                              <DetailCard handleClick={deletePengeluaran} item={{...item, index}} key={index} />
+                            list?.map((item, index) => (
+                                <DetailCard handleClick={deletePengeluaran} item={{ ...item, index }} key={index} />
                             ))
                         }
 
