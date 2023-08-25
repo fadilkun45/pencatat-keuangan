@@ -11,7 +11,7 @@ import ScrollToTop from "react-scroll-to-top"
 
 export const Main = () => {
     const toast = useToast()
-    
+
     const [newList, setNewList] = useState<MainList>()
     const list = useSelector((state: RootState) => state.mainList)
     const dispatch = useDispatch()
@@ -21,21 +21,21 @@ export const Main = () => {
     }, [])
 
     const submit = () => {
-        if(!newList?.title || !newList?.limit){
+        if (!newList?.title || !newList?.limit) {
             toast({
                 title: 'Title atau Bugdet Belum Di isi',
                 position: 'top-right',
                 isClosable: true,
                 duration: 1000,
                 colorScheme: "red",
-              })
-              return
+            })
+            return
         }
 
 
         const id = uuidv4()
-        dispatch(addList({ ...newList, currentAmount: 0, createdAt: new Date().toISOString() , id: id }))
-        setNewList({...newList, limit: 0, title: ''})
+        dispatch(addList({ ...newList, currentAmount: 0, createdAt: new Date().toISOString(), id: id }))
+        setNewList({ ...newList, limit: 0, title: '' })
         dispatch(getList())
     }
 
@@ -45,26 +45,29 @@ export const Main = () => {
         dispatch(getList())
     }
 
-   
+
 
     return (
-        <VStack >
-            <VStack width="full" textAlign="left">
-                <Text width="full">Nama</Text>
-                <Input value={newList?.title} onChange={(v) => setNewList({ ...newList, title: v.target.value })} />
-                <Text width="full" >Limit</Text>
-                <Input  value={formatRupiah(newList?.limit || 0)} onChange={(v) => setNewList({ ...newList, limit: parseInt(onlyNumber(v.target.value))  })} />
-                <Button fontSize={{'sm': 'md'}} onClick={submit}>Submit</Button>
-            </VStack>
+        <>
+            <VStack >
+                <VStack width="full" textAlign="left">
+                    <Text width="full">Nama</Text>
+                    <Input value={newList?.title} onChange={(v) => setNewList({ ...newList, title: v.target.value })} />
+                    <Text width="full" >Limit</Text>
+                    <Input value={formatRupiah(newList?.limit || 0)} onChange={(v) => setNewList({ ...newList, limit: parseInt(onlyNumber(v.target.value)) })} />
+                    <Button fontSize={{ 'sm': 'md' }} onClick={submit}>Submit</Button>
+                </VStack>
 
-            <VStack marginTop="40px" spacing="6" width="full" px="1" py="4" overflowY="auto">
-                {
-                  list.map((item) => (
-                        <MainBox handleClick={Delete} key={item.id} item={item} />
-                    ))
-                }
+                <VStack marginTop="40px" spacing="6" width="full" px="1" py="4" overflowY="auto">
+                    {
+                        list.map((item) => (
+                            <MainBox handleClick={Delete} key={item.id} item={item} />
+                        ))
+                    }
+                </VStack>
             </VStack>
-            <ScrollToTop smooth className="scrollTop"  color="#6f00ff" />
-        </VStack>
+            <ScrollToTop smooth className="scrollTop" color="#6f00ff" />
+        </>
+
     )
 }
