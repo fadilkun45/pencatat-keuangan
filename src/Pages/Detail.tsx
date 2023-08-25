@@ -72,15 +72,15 @@ export const Detailpage = () => {
                     <Heading size={{ 'sm': 'md', 'lg': 'md' }}>Total keseluruhan: {formatRupiah(listParent?.currentAmount || 0)}</Heading>
                     <Heading size={{ 'sm': 'md', 'lg': 'md' }}>Limit: {formatRupiah(listParent?.limit || 0)}  </Heading>
                     <Heading size={{ 'sm': 'md', 'lg': 'md' }} color={
-                        parseInt(((listParent.currentAmount! / listParent.limit!) * 100).toFixed(2)) < 30 ? "green.500"
-                            : parseInt(((listParent.currentAmount! / listParent.limit!) * 100).toFixed(2)) < 80 ? "yellow.500"
-                                : parseInt(((listParent.currentAmount! / listParent.limit!) * 100).toFixed(2)) < 100 ? "red.500"
+                        parseInt(((listParent?.currentAmount / listParent?.limit) * 100).toFixed(2)) < 30 ? "green.500"
+                            : parseInt(((listParent?.currentAmount / listParent?.limit) * 100).toFixed(2)) < 80 ? "yellow.500"
+                                : parseInt(((listParent?.currentAmount / listParent?.limit) * 100).toFixed(2)) < 100 ? "red.500"
                                     : "red.500"}  >
                         {
-                            parseInt(((listParent.currentAmount! / listParent.limit!) * 100).toFixed(2)) < 30 ? "Ayo Jajan"
-                            : parseInt(((listParent.currentAmount! / listParent.limit!) * 100).toFixed(2)) < 60 ? "Jajan dulu lagi gk sih"
-                                : parseInt(((listParent.currentAmount! / listParent.limit!) * 100).toFixed(2)) < 80 ? "Dikit Lagi"
-                                    : parseInt(((listParent.currentAmount! / listParent.limit!) * 100).toFixed(2)) < 100 ? "Waduh"
+                            parseInt(((listParent?.currentAmount / listParent?.limit) * 100).toFixed(2)) < 30 ? "Ayo Jajan"
+                            : parseInt(((listParent?.currentAmount / listParent?.limit) * 100).toFixed(2)) < 60 ? "Jajan dulu lagi gk sih"
+                                : parseInt(((listParent?.currentAmount / listParent?.limit) * 100).toFixed(2)) < 80 ? "Dikit Lagi"
+                                    : parseInt(((listParent?.currentAmount / listParent?.limit) * 100).toFixed(2)) < 100 ? "Waduh"
                                         : "JAJAN TEROS"
                         }
                     </Heading>
