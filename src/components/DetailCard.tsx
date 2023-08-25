@@ -17,7 +17,7 @@ export const DetailCard = ({item, handleClick}: {item: Detail, handleClick: (par
        {dayjs(item.createdAt).format("DD MMM YYYY, HH mm") }
     </Text>
     <HStack gap="9" mt="4">
-    <Button onClick={() => {handleClick(item)}} zIndex={6} width="sm" position="absolute"><DeleteIcon   /></Button>
+    <Button onClick={() => {handleClick(item)}} zIndex={6} width="full" ><DeleteIcon /></Button>
     </HStack>
 </Box>
   )
