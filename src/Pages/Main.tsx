@@ -66,7 +66,7 @@ export const Main = () => {
                     }
                 </VStack>
             </VStack>
-            <ScrollToTop smooth className="scrollTop" color="#6f00ff" />
+            {/* <ScrollToTop smooth className="scrollTop" color="#6f00ff" /> */}
         </>
 
     )
