@@ -1,14 +1,14 @@
 
 
 import { useState, useEffect, useLayoutEffect } from "react"
-import { DownloadIcon } from "@chakra-ui/icons"
+import { AddIcon, DownloadIcon } from "@chakra-ui/icons"
 import { HStack, Spacer, Text, VStack, useToast } from "@chakra-ui/react"
 import { useDispatch, useSelector } from "react-redux"
 import { addList, getList } from "../redux/feature/main"
 import dayjs from "dayjs"
 import ModalInputData from "./ModalInputData"
 import { RootState } from "../redux/store/Store"
-import { addDetail } from "../redux/feature/detail"
+import tambahData from "../assets/tambah_data.png"
 
 export const Navbar = () => {
   const toast = useToast()
@@ -110,8 +110,6 @@ const handleInputData = async (_file: any) => {
     dispatch(getList())
   }
 
-    
-
   })
 
 
@@ -140,7 +138,7 @@ const handleInputData = async (_file: any) => {
         <Text fontSize="xs">Download Data</Text>
       </VStack>
       <VStack mt="3" onClick={() => setModalInputData(true)} >
-        <DownloadIcon boxSize={3} />
+        <AddIcon boxSize={3} />
         <Text fontSize="xs">Insert Data</Text>
       </VStack>
       </VStack>
