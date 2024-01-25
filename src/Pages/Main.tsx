@@ -53,6 +53,7 @@ export const Main = () => {
                 <VStack width="full" textAlign="left">
                     <Text width="full">Nama</Text>
                     <Input value={newList?.title} onChange={(v) => setNewList({ ...newList, title: v.target.value })} />
+                    <Input type="checkbox"/>
                     <Text width="full" >Limit</Text>
                     <Input value={formatRupiah(newList?.limit || 0)} onChange={(v) => setNewList({ ...newList, limit: parseInt(onlyNumber(v.target.value)) })} />
                     <Button fontSize={{ 'sm': 'md' }} onClick={submit}>Submit</Button>
