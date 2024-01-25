@@ -70,8 +70,8 @@ export const Detailpage = () => {
             <Card width="full" textAlign="left" variant="elevated">
                 <CardHeader>
                     <Heading size={{ 'sm': 'md', 'lg': 'md' }}>Total keseluruhan: {formatRupiah(listParent?.currentAmount || 0)}</Heading>
-                    <Heading size={{ 'sm': 'md', 'lg': 'md' }}>Limit: {formatRupiah(listParent?.limit || 0)}  </Heading>
-                    <Heading size={{ 'sm': 'md', 'lg': 'md' }} color={
+                    <Heading display={listParent.limit === 0 ? "none" : ""}  size={{ 'sm': 'md', 'lg': 'md' }}>Limit: {formatRupiah(listParent?.limit || 0)}  </Heading>
+                    <Heading  display={listParent.limit === 0 ? "none" : ""}  size={{ 'sm': 'md', 'lg': 'md' }} color={
                         parseInt(((listParent?.currentAmount / listParent?.limit) * 100).toFixed(2)) < 30 ? "green.500"
                             : parseInt(((listParent?.currentAmount / listParent?.limit) * 100).toFixed(2)) < 80 ? "yellow.500"
                                 : parseInt(((listParent?.currentAmount / listParent?.limit) * 100).toFixed(2)) < 100 ? "red.500"

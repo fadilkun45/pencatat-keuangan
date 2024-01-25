@@ -14,9 +14,9 @@ export const MainBox = ({ item, handleClick }: { item: MainList, handleClick: (p
             </CardHeader>
             <CardBody cursor="pointer" onClick={() => navigate(`/detail?id=${item.id || ''}`)} marginTop="-10">
                 <Text fontSize={{ 'sm': 'lg' }}>Total : Rp. {formatRupiah(item.currentAmount || 0)}</Text>
-                <Text fontSize={{ 'sm': 'lg' }}>Limit : Rp. {formatRupiah(item.limit || 0)}</Text>
+                <Text display={item.limit === 0 ? "none" : ""} fontSize={{ 'sm': 'lg' }}>Limit : Rp. {formatRupiah(item.limit || 0)}</Text>
                     {/* <Text>{dayjs(item.createdAt).format("DD MMM YYYY")}</Text> */}
-                    <Text color={
+                    <Text display={item.limit === 0 ? "none" : ""}  color={
                         parseInt(((item.currentAmount! / item.limit!) * 100).toFixed(2)) < 30 ? "green.500"
                             : parseInt(((item.currentAmount! / item.limit!) * 100).toFixed(2)) < 80 ? "yellow.500"
                                 : parseInt(((item.currentAmount! / item.limit!) * 100).toFixed(2)) < 100 ? "red.500"

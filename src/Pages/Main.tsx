@@ -1,12 +1,13 @@
-import { Button, Input, Text, VStack, useToast } from "@chakra-ui/react"
+import { Button, Checkbox, HStack, Input, Text, VStack, useToast } from "@chakra-ui/react"
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState } from "../redux/store/Store"
-import { useEffect, useState } from 'react'
+import { ChangeEvent, MouseEvent, useEffect, useState } from 'react'
 import { addList, deleteList, getList, MainList } from "../redux/feature/main"
 import { MainBox } from "../components/MainBox"
 import { v4 as uuidv4 } from 'uuid';
 import { currencyToInteger, formatRupiah, onlyNumber } from "../lib/Formatter"
 import ScrollToTop from "react-scroll-to-top"
+import dayjs from "dayjs"
 
 
 export const Main = () => {
@@ -14,6 +15,7 @@ export const Main = () => {
 
     const [newList, setNewList] = useState<MainList>()
     const list = useSelector((state: RootState) => state.mainList)
+    const [checked, setChecked] = useState(false)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -21,15 +23,19 @@ export const Main = () => {
     }, [])
 
     const submit = () => {
-        if (!newList?.title || !newList?.limit) {
+        if (!newList?.title) {
             toast({
-                title: 'Title atau Bugdet Belum Di isi',
+                title: 'Title belum di isi',
                 position: 'top-right',
                 isClosable: true,
                 duration: 1000,
                 colorScheme: "red",
             })
             return
+        }
+
+        if(checked){
+            setChecked(false)
         }
 
 
@@ -40,11 +46,19 @@ export const Main = () => {
     }
 
     const Delete = (item: MainList) => {
-        console.log(item)
         dispatch(deleteList(item))
         dispatch(getList())
     }
 
+    const handleChecked = (v: ChangeEvent<HTMLInputElement>) => {
+        setChecked(v.target.checked)
+        if(v.target.checked){
+            setNewList({...newList, title: dayjs().format("DD MMMM YYYY")})
+        }else{
+            setNewList({...newList, title: ""})
+        }
+    }
+  
 
 
     return (
@@ -52,10 +66,10 @@ export const Main = () => {
             <VStack >
                 <VStack width="full" textAlign="left">
                     <Text width="full">Nama</Text>
-                    <Input value={newList?.title} onChange={(v) => setNewList({ ...newList, title: v.target.value })} />
-                    <Input type="checkbox"/>
+                    <Input disabled={checked}  value={newList?.title} onChange={(v) => setNewList({ ...newList, title: v.target.value })} />
+                   <HStack w="full"> <Checkbox isChecked={checked} onChange={(v) => handleChecked(v)}/> <Text>Nama Menggunakan Tanggal</Text></HStack>
                     <Text width="full" >Limit</Text>
-                    <Input value={formatRupiah(newList?.limit || 0)} onChange={(v) => setNewList({ ...newList, limit: parseInt(onlyNumber(v.target.value)) })} />
+                    <Input  value={formatRupiah(newList?.limit || 0)} onChange={(v) => setNewList({ ...newList, limit: parseInt(onlyNumber(v.target.value)) })} />
                     <Button fontSize={{ 'sm': 'md' }} onClick={submit}>Submit</Button>
                 </VStack>
 

@@ -70,7 +70,7 @@ export const mainListSlice = createSlice({
             localStorage.removeItem(action.payload.id || '')
             localStorage.setItem('MainList', JSON.stringify([...filtered]))
             state = [...filtered]
-        }
+        },
 
     }
 })
