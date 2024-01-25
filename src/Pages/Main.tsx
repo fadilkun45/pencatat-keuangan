@@ -13,7 +13,9 @@ import dayjs from "dayjs"
 export const Main = () => {
     const toast = useToast()
 
-    const [newList, setNewList] = useState<MainList>()
+    const [newList, setNewList] = useState<MainList>({
+        limit: 0,
+    })
     const list = useSelector((state: RootState) => state.mainList)
     const [checked, setChecked] = useState(false)
     const dispatch = useDispatch()
@@ -40,7 +42,7 @@ export const Main = () => {
 
 
         const id = uuidv4()
-        dispatch(addList({ ...newList, currentAmount: 0, createdAt: new Date().toISOString(), id: id }))
+        dispatch(addList({ ...newList, currentAmount: 0,  createdAt: new Date().toISOString(), id }))
         setNewList({ ...newList, limit: 0, title: '' })
         dispatch(getList())
     }

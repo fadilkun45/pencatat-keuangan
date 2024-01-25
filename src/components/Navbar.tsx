@@ -49,13 +49,14 @@ export const Navbar = () => {
   };
 
   const handleDownloadData = () => {
-    console.log(JSON.parse(localStorage.getItem("MainList") || "{}"))
+    // console.log(JSON.parse(localStorage.getItem("MainList") || "{}"))
 
     let data: any = []
 
     list.map((item) => {
       console.log(item)
-      let child = JSON.parse( localStorage.getItem(item.id || "") || "[]")
+      
+      let child = JSON.parse(localStorage.getItem(item.id || "") || "[]")
       data.push({
         parent: item,
         child
@@ -92,23 +93,29 @@ export const Navbar = () => {
 const handleInputData = async (_file: any) => {
   dispatch(getList())
   const parsedData: any = await readJsonFile(_file)
-  console.log(list)
+  console.log(parsedData)
 
   parsedData?.map((item: any) => {
 
-  if(list.filter((x) => x.id == item.parent.id).length !== 0) return
 
+  if(list.filter((x) => x.id == item.parent.id).length !== 0){
+    return
+  }else{
     dispatch(addList({...item.parent}))
-  if(item.child.length !== 0){
-    item.child.map((items) => {
-      dispatch(addDetail(items))
-    })
+    console.log(item)
+
+    if(item.child.length !== 0){
+      localStorage.setItem(item.child[0].id, JSON.stringify(item.child))
+    }
+    dispatch(getList())
   }
+
+    
+
   })
 
 
 
-  console.log(parsedData)
 }
 
 
