@@ -11,6 +11,7 @@ import dayjs from "dayjs"
 import ModalInputData from "./ModalInputData"
 import { RootState } from "../redux/store/Store"
 import tambahData from "../assets/tambah_data.png"
+import cloneDeep from "lodash.clonedeep"
 
 export const Navbar = () => {
   const toast = useToast()
@@ -55,9 +56,11 @@ export const Navbar = () => {
 
     let data: any = []
 
-    list.reverse()
+    const newData = cloneDeep(list)
 
-    list.map((item) => {
+    newData.reverse()
+
+    newData.map((item) => {
       console.log(item)
       
       let child = JSON.parse(localStorage.getItem(item.id || "") || "[]")
