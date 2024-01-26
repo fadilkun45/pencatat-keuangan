@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 
 
 import { useState, useEffect, useLayoutEffect } from "react"
@@ -53,6 +55,8 @@ export const Navbar = () => {
 
     let data: any = []
 
+    list.reverse()
+
     list.map((item) => {
       console.log(item)
       
@@ -90,7 +94,7 @@ export const Navbar = () => {
 
   })
 
-const handleInputData = async (_file: any) => {
+const handleInputData = async (_file: Blob) => {
   dispatch(getList())
   const parsedData: any = await readJsonFile(_file)
   console.log(parsedData)
