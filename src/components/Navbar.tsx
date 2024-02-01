@@ -28,6 +28,7 @@ export const Navbar = () => {
           { element: '.price-input',popover: { title: 'Masukan Harga', description: 'harga wajib di masukkan juga untuk pencatatan' } },
           { element: '.create-button', popover: { title: 'tambah catatan', description: 'Bila dirasa sudah sesuai langsung klik submit maka akan tercipta catatan baru dibawah' } },
           { element: '.info', popover: { title: 'Info keseluruhan', description: 'seluruh catatan yang kalian buat akan terakumulasi dibagian sini termaksud limit nya juga bila kalian isi diawal tadi' } },
+          { element: '.menu', popover: { title: 'Tambahan', description: 'oiya sebelum penutup tutorial untuk fitur lain nya bisa di klik dibagian sini, seperti download dan simpan data, dan juga install aplikasi ini agar bisa berjalan secara offline' } },
           { popover: { title: 'Have fun ^~^', description: 'semoga tutorial singkat ini dapat membantu kalian dalam menggunakan nya' } },
   
           // { element: '.footer', popover: { title: 'Title', description: 'Description' } },
@@ -66,10 +67,11 @@ export const Navbar = () => {
         <Spacer />
       
         <HStack>
-        <Box onClick={() => handleTutorial()}>
+        <Box mr="5px" onClick={() => handleTutorial()}>
             <QuestionIcon  w={"20px"} h={"20px"}/>
           </Box>
-          <Box onClick={() => setShowDrawer(true)}>
+
+          <Box className="menu" onClick={() => setShowDrawer(true)}>
             <HamburgerIcon  w={"20px"} h={"20px"}/>
           </Box>
          
