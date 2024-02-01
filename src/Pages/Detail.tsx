@@ -54,13 +54,18 @@ export const Detailpage = () => {
 
     return (
         <VStack>
+            <VStack w="full" className='name-input'>
             <Text width="full" textAlign="left">Nama</Text>
             <Input value={newDetail?.title} onChange={(v) => setNewDetail({ ...newDetail, title: v.target.value })} />
+            </VStack>
+            <VStack w="full" className='price-input'>
             <Text width="full" textAlign="left">Bugdet</Text>
             <Input value={formatRupiah(newDetail?.amount || 0)} onChange={(v) => setNewDetail({ ...newDetail, amount: parseInt(onlyNumber(v.target.value)) || 0 })} />
+            </VStack>
+          
             <HStack width="full" my="4" justifyContent="flex-end">
-                <Button fontSize={{ 'sm': 'md' }} colorScheme="red" onClick={() => history.back()}>Kembali</Button>
-                <Button fontSize={{ 'sm': 'md' }} colorScheme="blue" onClick={submit}>Submit</Button>
+                <Button className='close-button'  fontSize={{ 'sm': 'md' }} colorScheme="red" onClick={() => history.back()}>Kembali</Button>
+                <Button className='create-button' fontSize={{ 'sm': 'md' }} colorScheme="blue" onClick={submit}>Submit</Button>
             </HStack>
             <VStack>
 
@@ -68,9 +73,9 @@ export const Detailpage = () => {
             </VStack>
 
             <Card width="full" textAlign="left" variant="elevated">
-                <CardHeader>
-                    <Heading size={{ 'sm': 'md', 'lg': 'md' }}>Total keseluruhan: {formatRupiah(listParent?.currentAmount || 0)}</Heading>
-                    <Heading display={listParent.limit === 0 ? "none" : ""}  size={{ 'sm': 'md', 'lg': 'md' }}>Limit: {formatRupiah(listParent?.limit || 0)}  </Heading>
+                <CardHeader className='info'>
+                    <Heading size={{ 'sm': 'md', 'lg': 'md' }}>Total keseluruhan: Rp.{formatRupiah(listParent?.currentAmount || 0)}</Heading>
+                    <Heading display={listParent.limit === 0 ? "none" : ""}  size={{ 'sm': 'md', 'lg': 'md' }}>Limit: Rp.{formatRupiah(listParent?.limit || 0)}  </Heading>
                     <Heading  display={listParent.limit === 0 ? "none" : ""}  size={{ 'sm': 'md', 'lg': 'md' }} color={
                         parseInt(((listParent?.currentAmount / listParent?.limit) * 100).toFixed(2)) < 30 ? "green.500"
                             : parseInt(((listParent?.currentAmount / listParent?.limit) * 100).toFixed(2)) < 80 ? "yellow.500"

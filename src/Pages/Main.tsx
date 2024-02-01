@@ -36,13 +36,13 @@ export const Main = () => {
             return
         }
 
-        if(checked){
+        if (checked) {
             setChecked(false)
         }
 
 
         const id = uuidv4()
-        dispatch(addList({ ...newList, currentAmount: 0,  createdAt: new Date().toISOString(), id }))
+        dispatch(addList({ ...newList, currentAmount: 0, createdAt: new Date().toISOString(), id }))
         setNewList({ ...newList, limit: 0, title: '' })
         dispatch(getList())
     }
@@ -54,25 +54,31 @@ export const Main = () => {
 
     const handleChecked = (v: ChangeEvent<HTMLInputElement>) => {
         setChecked(v.target.checked)
-        if(v.target.checked){
-            setNewList({...newList, title: dayjs().format("DD MMMM YYYY")})
-        }else{
-            setNewList({...newList, title: ""})
+        if (v.target.checked) {
+            setNewList({ ...newList, title: dayjs().format("DD MMMM YYYY") })
+        } else {
+            setNewList({ ...newList, title: "" })
         }
     }
-  
+
 
 
     return (
         <>
             <VStack >
                 <VStack width="full" textAlign="left">
-                    <Text width="full">Nama</Text>
-                    <Input disabled={checked}  value={newList?.title} onChange={(v) => setNewList({ ...newList, title: v.target.value })} />
-                   <HStack w="full"> <Checkbox isChecked={checked} onChange={(v) => handleChecked(v)}/> <Text>Nama Menggunakan Tanggal</Text></HStack>
+                    <VStack w="full" className="name-input">
+                        <Text width="full">Nama</Text>
+                        <Input disabled={checked} value={newList?.title} onChange={(v) => setNewList({ ...newList, title: v.target.value })} />
+                        <HStack w="full"> <Checkbox isChecked={checked} onChange={(v) => handleChecked(v)} /> <Text>Nama Menggunakan Tanggal</Text></HStack>
+                    </VStack>
+
+                    <VStack className="limit-input"  w="full">
                     <Text width="full" >Limit</Text>
-                    <Input  value={formatRupiah(newList?.limit || 0)} onChange={(v) => setNewList({ ...newList, limit: parseInt(onlyNumber(v.target.value)) })} />
-                    <Button fontSize={{ 'sm': 'md' }} onClick={submit}>Submit</Button>
+                    <Input value={formatRupiah(newList?.limit || 0)} onChange={(v) => setNewList({ ...newList, limit: parseInt(onlyNumber(v.target.value)) })} />
+                    </VStack>
+
+                    <Button className="create-btn" fontSize={{ 'sm': 'md' }} onClick={submit}>Submit</Button>
                 </VStack>
 
                 <VStack marginTop="40px" spacing="6" width="full" px="1" py="4" overflowY="auto">

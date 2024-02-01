@@ -1,153 +1,79 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 
-
-import { useState, useEffect, useLayoutEffect } from "react"
-import { AddIcon, DownloadIcon } from "@chakra-ui/icons"
-import { HStack, Spacer, Text, VStack, useToast } from "@chakra-ui/react"
-import { useDispatch, useSelector } from "react-redux"
-import { addList, getList } from "../redux/feature/main"
-import dayjs from "dayjs"
-import ModalInputData from "./ModalInputData"
-import { RootState } from "../redux/store/Store"
-import tambahData from "../assets/tambah_data.png"
-import cloneDeep from "lodash.clonedeep"
+import { useState } from "react"
+import { HamburgerIcon, QuestionIcon } from "@chakra-ui/icons"
+import { Box, HStack, Spacer, Text, VStack } from "@chakra-ui/react"
+import ModalNav from "./ModalNav"
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
 
 export const Navbar = () => {
-  const toast = useToast()
-  const [supportsPWA, setSupportsPWA] = useState(false);
-  const [promptInstall, setPromptInstall] = useState<any>();
-  const [PwaInstalled, setPwaInstalled] = useState(false)
-  const list = useSelector((state: RootState) => state.mainList)
-  const [modalInputData, setModalInputData] = useState(false)
-  const dispatch = useDispatch()
 
-  useEffect(() => {
-    const handler = (e: { preventDefault: () => void; }) => {
-      e.preventDefault();
-      setSupportsPWA(true);
-      setPromptInstall(e);
-    };
-    window.addEventListener("beforeinstallprompt", handler);
-  }, []);
+  const [showDrawer, setShowDrawer] = useState(false)
 
 
-  const onClick = (evt: { preventDefault: () => void; }) => {
-    evt.preventDefault();
+  const handleTutorial = () => {
 
-    if (!supportsPWA) {
-      toast({
-        title: 'Upss Device Mu tak support PWA',
-        position: 'top-right',
-        isClosable: true,
-        duration: 1000,
-        colorScheme: "yellow",
-      })
+    let driverStepList: any
+
+
+    if(location.pathname.includes("detail")){
+       driverStepList = driver({
+        showProgress: true,
+      
+        steps: [
+          { popover: {title: "Bagaimana cara memakai aplikasi ini ? part 2", description: "step by step pembuatan grup dan penambahan isi detail grup tersebut"}},
+          { element: '.name-input', popover: { title: 'Masukan nama', description: 'nama wajib di masukkan contoh makanan, minuman atau apapun itu' } },
+          { element: '.price-input',popover: { title: 'Masukan Harga', description: 'harga wajib di masukkan juga untuk pencatatan' } },
+          { element: '.create-button', popover: { title: 'tambah catatan', description: 'Bila dirasa sudah sesuai langsung klik submit maka akan tercipta catatan baru dibawah' } },
+          { element: '.info', popover: { title: 'Info keseluruhan', description: 'seluruh catatan yang kalian buat akan terakumulasi dibagian sini termaksud limit nya juga bila kalian isi diawal tadi' } },
+          { popover: { title: 'Have fun ^~^', description: 'semoga tutorial singkat ini dapat membantu kalian dalam menggunakan nya' } },
+  
+          // { element: '.footer', popover: { title: 'Title', description: 'Description' } },
+        ]
+      });
+  
+    }else{
+       driverStepList = driver({
+        showProgress: true,
+      
+        steps: [
+          { popover: {title: "Bagaimana cara memakai aplikasi ini ?", description: "step by step pembuatan grup dan penambahan detail grup tersebut"}},
+          { element: '.name-input', popover: { title: 'Masukan nama', description: 'nama wajib di masukkan dan bila bingung isi apa bisa checklist untuk menggunakan penamaan tgl berdasarkan waktu pembuatan' } },
+          { element: '.limit-input',popover: { title: 'Masukan limit', description: 'untuk limit ini opsional namun akan sangat berguna untuk sebagai pengingat apakah sudah melebihi batas yang ditentukan atau belom' } },
+          { element: '.create-btn', popover: { title: 'Buat grup', description: 'Bila dirasa sudah sesuai langsung klik submit maka akan tercipta grup baru dibawah' } },
+          { popover: { title: 'Lanjut part 2', description: 'selanjutnya silahkan klik grup yang baru dibuat untuk lanjut tutorial berikut nya' } },
+  
+          // { element: '.footer', popover: { title: 'Title', description: 'Description' } },
+        ]
+      });
+  
     }
-
-    if (!promptInstall) {
-      return;
-    }
-    promptInstall.prompt();
-  };
-
-  const handleDownloadData = () => {
-    // console.log(JSON.parse(localStorage.getItem("MainList") || "{}"))
-
-    let data: any = []
-
-    const newData = cloneDeep(list)
-
-    newData.reverse()
-
-    newData.map((item) => {
-      console.log(item)
-
-      let child = JSON.parse(localStorage.getItem(item.id || "") || "[]")
-      data.push({
-        parent: item,
-        child
-      })
-    })
+    
+    driverStepList.drive();
+  } 
 
 
-    const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
-      JSON.stringify(data) || ""
-    )}`;
-    const link = document.createElement("a");
-    link.href = jsonString;
-    link.download = `pencatat-keuangan-archive:${dayjs().format("MM-YYYY-DD:HH:mm")}.json`;
-
-    link.click();
-
-  }
-
-  const readJsonFile = (file: Blob) =>
-    new Promise((resolve, reject) => {
-      const fileReader = new FileReader()
-
-      fileReader.onload = event => {
-        if (event.target) {
-          resolve(JSON.parse(event.target.result as string))
-        }
-      }
-
-      fileReader.onerror = error => reject(error)
-      fileReader.readAsText(file)
-
-    })
-
-  const handleInputData = async (_file: Blob) => {
-    dispatch(getList())
-    const parsedData: any = await readJsonFile(_file)
-    console.log(parsedData)
-
-    parsedData?.map((item: any) => {
-
-
-      if (list.filter((x) => x.id == item.parent.id).length !== 0) {
-        return
-      } else {
-        dispatch(addList({ ...item.parent }))
-        console.log(item)
-
-        if (item.child.length !== 0) {
-          localStorage.setItem(item.child[0].id, JSON.stringify(item.child))
-        }
-        dispatch(getList())
-      }
-
-    })
-
-  }
-
-  console.log("re, render")
 
 
   return (
     <>
-
-      <ModalInputData file={handleInputData} show={modalInputData} hideModal={() => setModalInputData(!modalInputData)} />
+      <ModalNav hideModal={() => setShowDrawer(!showDrawer)} show={showDrawer} />
 
       <HStack marginBottom="16">
         <Text fontWeight="bold" fontSize="xl">Pencatat Keuangan</Text>
         <Spacer />
-        {
-          supportsPWA ? <VStack onClick={onClick} >
-            <DownloadIcon boxSize={3} />
-            <Text fontSize="xs">Install App</Text>
-          </VStack> : ""
-        }
-        <VStack>
-          <VStack onClick={handleDownloadData} >
-            <DownloadIcon boxSize={3} />
-            <Text fontSize="xs">Download Data</Text>
-          </VStack>
-          <VStack mt="3" onClick={() => setModalInputData(true)} >
-            <AddIcon boxSize={3} />
-            <Text fontSize="xs">Insert Data</Text>
-          </VStack>
-        </VStack>
+      
+        <HStack>
+        <Box onClick={() => handleTutorial()}>
+            <QuestionIcon  w={"20px"} h={"20px"}/>
+          </Box>
+          <Box onClick={() => setShowDrawer(true)}>
+            <HamburgerIcon  w={"20px"} h={"20px"}/>
+          </Box>
+         
+        </HStack>
       </HStack>
     </>
   )
