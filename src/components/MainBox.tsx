@@ -21,7 +21,7 @@ export const MainBox = ({ item, handleClick }: { item: MainList, handleClick: (p
                             : parseInt(((item.currentAmount! / item.limit!) * 100).toFixed(2)) < 80 ? "yellow.500"
                                 : parseInt(((item.currentAmount! / item.limit!) * 100).toFixed(2)) < 100 ? "red.500"
                                     : "red.500"}
-                                     >{formatRupiah(item.currentAmount || 0)} dari Rp.{formatRupiah(item.limit || 0)} | Rp.{((item.currentAmount! / item.limit!) * 100).toFixed(2)} %</Text>
+                                     >{formatRupiah(item.currentAmount || 0)} dari Rp.{formatRupiah(item.limit || 0)} | {((item.currentAmount! / item.limit!) * 100).toFixed(2)} %</Text>
             </CardBody>
             <CardFooter marginTop="-5">
                 <Button onClick={() => { handleClick(item) }} zIndex={6} width="full" position="relative"><DeleteIcon /></Button>
