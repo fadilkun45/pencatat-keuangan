@@ -1,64 +1,46 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  /* text-align: center; */
-}
-/* 
-html {
-  scroll-behavior: smooth;
-} */
+@import "tailwindcss";
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+@theme {
+  --font-sans: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --color-kertas: #f3f6f1;
+  --color-permukaan: #ffffff;
+  --color-tinta: #1c2321;
+  --color-redup: #5f6b66;
+  --color-garis: #dfe5df;
+  --color-aman: #2f7a4f;
+  --color-waspada: #b97d0c;
+  --color-bahaya: #c8372d;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-kertas: #121715;
+    --color-permukaan: #1a211e;
+    --color-tinta: #e6ece8;
+    --color-redup: #9aa59f;
+    --color-garis: #2a332f;
+    --color-aman: #5fbf86;
+    --color-waspada: #e3ad3b;
+    --color-bahaya: #f0695e;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 1s linear;
-  }
-
-  a:nth-of-type(1) .logo {
-    animation: logo-spin infinite 1s linear;
-  }
+body {
+  @apply bg-kertas text-tinta font-sans antialiased;
+  font-variant-numeric: tabular-nums;
 }
 
-.card {
-  padding: 2em;
+:focus-visible {
+  @apply outline-2 outline-offset-2 outline-aman;
 }
 
-.read-the-docs {
-  color: #888;
+/* in the components layer so utilities like w-32 can override them */
+@layer components {
+.field {
+  @apply w-full min-w-0 rounded-lg border border-garis bg-permukaan px-3 py-2.5 text-base placeholder:text-redup focus:border-aman focus:outline-none;
 }
 
-.scrollTop {
-  position: fixed ;
-  z-index: 200;
-  right: 0;
-  width: 40px;
-  display: flex ;
-  align-items: center ;
-  justify-content: center ;
+.btn {
+  @apply rounded-lg bg-tinta px-4 py-2.5 font-semibold text-kertas active:scale-[.98] disabled:opacity-50;
 }
-
-.scrollTop svg {
-  width: 18px ;
 }
