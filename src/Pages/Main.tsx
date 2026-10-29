@@ -1,74 +1,64 @@
-import { Button, Input, Text, VStack, useToast } from "@chakra-ui/react"
-import { useSelector, useDispatch } from 'react-redux'
+import { FormEvent, useState } from "react"
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from "../redux/store/Store"
-import { useEffect, useState } from 'react'
-import { addList, deleteList, getList, MainList } from "../redux/feature/main"
+import { addList, deleteList, MainList } from "../redux/feature/main"
 import { MainBox } from "../components/MainBox"
-import { v4 as uuidv4 } from 'uuid';
-import { currencyToInteger, formatRupiah, onlyNumber } from "../lib/Formatter"
-import ScrollToTop from "react-scroll-to-top"
-
+import { Meter } from "../components/Meter"
+import { formatRupiah, onlyNumber, sumAmount } from "../lib/Formatter"
+import { newId } from "../lib/storage"
 
 export const Main = () => {
-    const toast = useToast()
-
-    const [newList, setNewList] = useState<MainList>()
+    const [title, setTitle] = useState("")
+    const [limit, setLimit] = useState(0)
+    const [error, setError] = useState("")
     const list = useSelector((state: RootState) => state.mainList)
+    const detail = useSelector((state: RootState) => state.detail)
     const dispatch = useDispatch()
 
-    useEffect(() => {
-        dispatch(getList())
-    }, [])
+    const spentOf = (id: string) => sumAmount(detail[id])
+    const totalLimit = list.reduce((t, c) => t + c.limit, 0)
+    const totalSpent = list.reduce((t, c) => t + spentOf(c.id), 0)
 
-    const submit = () => {
-        if (!newList?.title || !newList?.limit) {
-            toast({
-                title: 'Title atau Bugdet Belum Di isi',
-                position: 'top-right',
-                isClosable: true,
-                duration: 1000,
-                colorScheme: "red",
-            })
-            return
-        }
-
-
-        const id = uuidv4()
-        dispatch(addList({ ...newList, currentAmount: 0, createdAt: new Date().toISOString(), id: id }))
-        setNewList({ ...newList, limit: 0, title: '' })
-        dispatch(getList())
+    const submit = (e: FormEvent) => {
+        e.preventDefault()
+        if (!title.trim() || !limit) return setError("Isi nama dan limit budget dulu.")
+        dispatch(addList({ id: newId(), title: title.trim(), limit, createdAt: new Date().toISOString() }))
+        setTitle(""); setLimit(0); setError("")
     }
 
-    const Delete = (item: MainList) => {
-        console.log(item)
-        dispatch(deleteList(item))
-        dispatch(getList())
+    const remove = (item: MainList) => {
+        if (confirm(`Hapus budget "${item.title}" beserta semua catatannya?`)) dispatch(deleteList(item.id))
     }
-
-
 
     return (
-        <>
-            <VStack >
-                <VStack width="full" textAlign="left">
-                    <Text width="full">Nama</Text>
-                    <Input value={newList?.title} onChange={(v) => setNewList({ ...newList, title: v.target.value })} />
-                    <Input type="checkbox"/>
-                    <Text width="full" >Limit</Text>
-                    <Input value={formatRupiah(newList?.limit || 0)} onChange={(v) => setNewList({ ...newList, limit: parseInt(onlyNumber(v.target.value)) })} />
-                    <Button fontSize={{ 'sm': 'md' }} onClick={submit}>Submit</Button>
-                </VStack>
+        <main className="pb-10">
+            {list.length > 0 && (
+                <section aria-label="Ringkasan" className="mb-8">
+                    <p className="text-redup">Sisa dari semua budget</p>
+                    <p className={`text-5xl font-bold tracking-tight ${totalLimit - totalSpent < 0 ? 'text-bahaya' : ''}`}>
+                        Rp{formatRupiah(totalLimit - totalSpent)}
+                    </p>
+                    <div className="mt-4"><Meter spent={totalSpent} limit={totalLimit} thick /></div>
+                    <p className="mt-2 text-sm text-redup">Terpakai Rp{formatRupiah(totalSpent)} dari Rp{formatRupiah(totalLimit)}</p>
+                </section>
+            )}
 
-                <VStack marginTop="40px" spacing="6" width="full" px="1" py="4" overflowY="auto">
-                    {
-                        list.map((item) => (
-                            <MainBox handleClick={Delete} key={item.id} item={item} />
-                        ))
-                    }
-                </VStack>
-            </VStack>
-            {/* <ScrollToTop smooth className="scrollTop" color="#6f00ff" /> */}
-        </>
+            <form onSubmit={submit} className="rounded-xl border border-garis bg-permukaan p-4">
+                <h2 className="mb-3 font-semibold">{list.length ? "Tambah budget" : "Mulai dengan budget pertamamu"}</h2>
+                <div className="flex gap-2">
+                    <input className="field" aria-label="Nama budget" placeholder="Makan, bensin…" value={title} onChange={(e) => setTitle(e.target.value)} />
+                    <input className="field w-36 shrink-0" aria-label="Limit" inputMode="numeric" placeholder="Limit"
+                        value={limit ? formatRupiah(limit) : ""} onChange={(e) => setLimit(onlyNumber(e.target.value))} />
+                </div>
+                {error && <p className="mt-2 text-sm text-bahaya" role="alert">{error}</p>}
+                <button className="btn mt-3 w-full">Tambah budget</button>
+            </form>
 
+            <ul className="mt-4 divide-y divide-garis">
+                {[...list].reverse().map((item) => (
+                    <MainBox key={item.id} item={item} spent={spentOf(item.id)} handleClick={remove} />
+                ))}
+            </ul>
+        </main>
     )
 }

@@ -1,64 +1,32 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
-import cloneDeep from "lodash.clonedeep"
+import { deleteList } from "./main"
 
+// Stored under localStorage key = category id (oldest first). `id` is the category id
+// (legacy format, kept so old builds can still read the data); `uid` identifies the item.
 export interface Detail {
-    title?: string,
-    amount?: number,
-    createdAt?: string,
-    id?: string,
-    index?: number
+    uid: string,
+    id: string,
+    title: string,
+    amount: number,
+    createdAt: string,
 }
-
-const initialState: Detail[] = [
-
-]
 
 export const detailSlice = createSlice({
     name: "detail",
-    initialState,
+    initialState: {} as Record<string, Detail[]>,
     reducers: {
-        getDetail: (state, action: PayloadAction<Detail>) => {
-
-            state.length = 0
-
-
-            if (state.length !== 0) {
-                return
-            }
-
-
-            if (JSON.parse(localStorage.getItem(action.payload.id!) ?? '{}') === null || Object.keys(JSON.parse(localStorage.getItem(action.payload.id!) ?? '{}')).length === 0) {
-                return
-            }
-
-            state.push(...JSON.parse(localStorage.getItem(action.payload.id!) ?? '{}'))
-            
-            state.reverse()
-
-        },
-
         addDetail: (state, action: PayloadAction<Detail>) => {
-            state.reverse()
-            localStorage.setItem(action.payload.id!, JSON.stringify([...state, action.payload]))
-            state.push(action.payload)
+            (state[action.payload.id] ??= []).push(action.payload)
         },
-
         deleteDetail: (state, action: PayloadAction<Detail>) => {
-            // state.reverse()
-            let oldState = cloneDeep(state)
-            oldState.splice(action.payload.index!, 1)
-            // console.log("baru",filtered)
-            oldState.reverse()
-
-            console.log("delete",oldState)
-
-            localStorage.setItem(action.payload.id!, JSON.stringify([...oldState]))
-            state = [...oldState]
-        }
+            const { id, uid } = action.payload
+            state[id] = (state[id] ?? []).filter((d) => d.uid !== uid)
+        },
     },
-
+    extraReducers: (builder) => {
+        builder.addCase(deleteList, (state, action) => { delete state[action.payload] })
+    },
 })
 
-export const { getDetail, addDetail, deleteDetail } = detailSlice.actions
+export const { addDetail, deleteDetail } = detailSlice.actions
 export default detailSlice.reducer
